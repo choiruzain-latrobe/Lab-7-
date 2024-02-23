@@ -159,7 +159,7 @@ module.exports = config;
 ```
 
 
-Create a new file, **blog/.sequelizerc.**, so that it will look like
+Create a new file, **blog/api/.sequelizerc.**, so that it will look like
 
 ```
 const path = require('path');
@@ -188,8 +188,15 @@ mkdir -p src/{models,migrations,seeders}
 
 Run this command, under **blog** directory
 ```
-docker compose run --rm api sequelize model:create name Post --attributes title:string,content:text
+docker compose run --rm api sequelize model:create --name Post --attributes title:string,content:text
 ```
+"If the command doesn't work, double-check that you have saved .sequelizerc in the right place (it must be in the api/ folder).
+
+If it is successful, it will create a **post.js** file under the **models** directory and an **xxxcreate-post.js** file under the **migrations** directory as seen in the image below:"
+
+<p align="center">
+<img title="a title" alt="Alt text" src="1.jpg" width="200" >
+</p>
 
 
 
