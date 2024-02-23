@@ -192,11 +192,151 @@ docker compose run --rm api sequelize model:create --name Post --attributes titl
 ```
 "If the command doesn't work, double-check that you have saved .sequelizerc in the right place (it must be in the api/ folder).
 
-If it is successful, it will create a **post.js** file under the **models** directory and an **xxxcreate-post.js** file under the **migrations** directory as seen in the image below:"
+If it is successful, it will create a **post.js** file, as a model definition, under the **models** directory and an **xxxcreate-post.js** file under the **migrations** directory as seen in the image below:"
 
 <p align="center">
 <img title="a title" alt="Alt text" src="1.jpg" width="200" >
 </p>
 
+## Migrate to database
+Run 
+```javascript
+ docker compose run --rm api sequelize db:migrate 
+```
+Yo will see the output as follows
+<p align="center">
+<img title="a title" alt="Alt text" src="2.jpg" width="600" >
+</p>
+
+It means that the post has been migrated. Note: There is no record has been posted in the table Posts. We will create this later. At the moment we just check the table in the MySQL
+
+### check it in the MySQL
+In the terminal execute the following commands:
+```
+docker exec -it blog-db-1 bash
+```
+then, come inside the MySQL terminal (adjust with the password that you saved inside **mysql.env**)
+```
+mysql -uadmin -pb763027d3193dd897147da2c96c9417ee5d42a433f49fdd2
+```
+You may go to the database development_db you have created by executing the command
+```
+use development_db
+```
+
+If you check in the database, you will see the Posts table has been created:
+
+<p align="center">
+<img title="tableposts" alt="Alt text" src="3.jpg" width="400" >
+</p>
+
+## Change model definition
+File: blog/api/src/models/post.js
+Modify model definition to specify validations, so that the posts.js become as follows:
+
+```javascript
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Post extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+    }
+  };
+  Post.init({
+    title: {
+      type: DataTypes.STRING,
+      validate: { notEmpty: true }
+    },
+
+    content: {
+      type: DataTypes.TEXT,
+      validate: { notEmpty: true }
+    }
+  }, {
+    sequelize,
+    modelName: 'Post',
+  });
+  return Post;
+};
+```
+
+## Create a Seeder
+Note: Run in the **blog** directory.
+
+Use the Sequelize command to create a seeder for the Post records:
+
+```
+docker compose run --rm api sequelize seed:create --name posts-seed
+```
+You will see that new js file **xxx-posts-seed.js** is created
+<p align="center">
+<img title="seederpost" alt="Alt text" src="4.jpg" width="400" >
+</p>
+
+
+### Change only Up function
+Note : Modify **xxx-posts-seed.js** to create 2 dummy records.
+
+Open the file and change the content into the following script:
+
+```javascript
+module.exports = {
+
+    up: function(queryInterface, Sequelize) {
+
+// Define dummy data for posts
+        const posts = [
+        {
+            title: 'A silly post',
+            content: 'Roses are red, violets are blue, I am a poet.',
+            createdAt: new Date('2010/08/17 12:09'),
+            updatedAt: new Date('2010/08/17 12:09')
+        }, 
+        {
+            title: 'New technology',
+            content: 'These things called "computers" are fancy.',
+            createdAt: new Date('2011/03/06 15:32'),
+            updatedAt: new Date('2011/03/06 15:47')
+        }
+        ];
+
+// Insert posts into the database
+return queryInterface.bulkInsert('Posts', posts, {});
+},
+
+down: function(queryInterface, Sequelize) {
+
+// Delete all posts from the database
+return queryInterface.bulkDelete('Posts', null, {});
+}
+};
+```
+
+### Seed the posts
+Run the following under the blog directory
+
+```
+ docker compose run --rm api sequelize db:seed:all 
+```
+
+You will see that we migrated two records into the Posts table, as seen in the screensshot below
+
+<p align="center">
+<img title="migrating-seed" alt="Alt text" src="5.jpg" width="600" >
+</p>
+
+By following the same way of the instruction in the MySQL, you can see that two records have been created
+
+<p align="center">
+<img title="see-the-seed" alt="Alt text" src="6.jpg" width="600" >
+</p>
 
 
