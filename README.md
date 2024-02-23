@@ -44,3 +44,9 @@ app.use('/posts', posts) // <-- Insert this line
 module.exports = routes;
 ```
 
+Try to use HTTPie to send a request to the index endpoint (GET /posts) as follows;
+```
+http GET localhost:3001/posts 
+```
+
+
