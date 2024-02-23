@@ -1,7 +1,5 @@
 const express = require('express');
-
 const router = express.Router();
-
 // Index: GET /posts/
 router.get('/', (req, res) => {
   res.json({ todo: 'List posts' });
@@ -35,5 +33,4 @@ router.post('/', (req, res) => {
 router.put('/:postId', (req, res) => {
   res.json({ todo: 'Update post with ID=' + req.params.postId });
 });
-
 module.exports = router;
