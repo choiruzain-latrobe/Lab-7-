@@ -105,5 +105,18 @@ Stop docker
 ```
 docker compose down
 ```
+Create a new folder in the blog/ project directory root called **env.**
+Inside this folder create a file called **mysql.env.** 
+Generate password and other details (as per document guidelines), so that in the **blog/env/mysql.env** the code will look like:
+```
+MYSQL_USER=admin
+MYSQL_PASS=b763027d3193dd897147da2c96c9417ee5d42a433f49fdd2
+MYSQL_REMOTE_HOST=db
+MYSQL_REMOTE_PORT=3306
+```
+## New Service (edit docker-compose.yml)
+
+
+
 
 
