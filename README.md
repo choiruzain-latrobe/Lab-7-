@@ -184,7 +184,12 @@ Under the **blog/api** folder, create three directories, as follows;
 mkdir -p src/{models,migrations,seeders}
 ```
 
+# Creating model
 
+Run this command, under **blog** directory
+```
+docker compose run --rm api sequelize model:create name Post --attributes title:string,content:text
+```
 
 
 
