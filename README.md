@@ -140,9 +140,49 @@ volumes:
     external: false
 
 ```
+## Create new file 
+Create a new file, **blog/api/src/config/database.js**, so that it will look like
+```javascript
+// Discover Node environment (default to development)
+const nodeEnv = process.env.NODE_ENV || 'development';
+
+// Put database configuration properties into an object
+const config = {
+database: nodeEnv + '_db',
+user: process.env.MYSQL_USER,
+password: process.env.MYSQL_PASS,
+host: process.env.MYSQL_REMOTE_HOST,
+port: process.env.MYSQL_REMOTE_PORT,
+dialect: 'mysql'
+};
+module.exports = config;
+```
 
 
+Create a new file, **blog/.sequelizerc.**, so that it will look like
 
+```
+const path = require('path');
+const dbConfig = require('./src/config/database');
+
+// Build the connection URL string
+const connectionUrl = 'mysql://' +
+dbConfig.user + ':' + dbConfig.password + '@' +
+dbConfig.host + ':' + dbConfig.port + '/' + dbConfig.database;
+
+// Export settings for the Sequelize command line tool
+module.exports = {
+'url': connectionUrl,
+'migrations-path': path.resolve('src', 'migrations'),
+'models-path': path.resolve('src', 'models'),
+'seeders-path': path.resolve('src', 'seeders')
+};
+```
+## Create sub directories
+Under the **blog/api** folder, create three directories, as follows;
+```
+mkdir -p src/{models,migrations,seeders}
+```
 
 
 
