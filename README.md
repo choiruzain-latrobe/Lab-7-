@@ -115,6 +115,34 @@ MYSQL_REMOTE_HOST=db
 MYSQL_REMOTE_PORT=3306
 ```
 ## New Service (edit docker-compose.yml)
+Modify the file as follows:
+```
+version: "2"
+services:
+  api:
+    build: api
+    volumes:
+      - "./api:/app"
+    env_file: 
+      - ./env/mysql.env
+    ports:
+      - "3001:3000"
+    links:
+      - db
+  db:
+    image: tutum/mysql:5.6
+    environment: 
+      - ON_CREATE_DB=development_db 
+    env_file: 
+      - ./env/mysql.env 
+volumes: 
+  blog-db-data:
+    external: false
+
+```
+
+
+
 
 
 
