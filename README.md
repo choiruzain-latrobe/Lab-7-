@@ -1,32 +1,37 @@
-# blog-api
+# Blog API Documentation
 
-This repository contains the RESTful API for accessing the blog database.
-## clone
+This repository hosts the RESTful API for accessing the `development_db` database.
 
-```
-git clone https://github.com/choiruzain-latrobe/Lab-7-.git
-```
+## Setup Instructions
 
+Follow these steps to set up and run the Blog API:
 
-## mock-rest-server
-```
-cd mock-rest-server
-docker compose up --build
-```
+1. **Clone the Git Repository:**
 
-then, call the localhost 
+    ```bash
+    git clone https://github.com/choiruzain-latrobe/Lab-7-.git
+    ```
 
-[http:localhost:3000](http://localhost:3000/)
+2. **Run the Mock Rest Server:**
 
-## blog
-```
-cd blog
-docker compose up --build
-```
-## solutions
+    ```bash 
+    cd mock-rest-server
+    docker compose up --build
+    ```
 
-### change the routes.js 
-so that it can look as follows
+   After running the server, access it locally at [http://localhost:3001](http://localhost:3001/).
+
+3. **Run the Blog Directory:**
+
+    ```bash
+    cd blog
+    docker compose up --build
+    ```
+
+## Step by step Solutions (of Blog API)
+
+### Configure Routes 
+Modify the `blog/api/src/config/routes.js` file as follows:
 
 ```javascript
 const index = require('../controllers/index');
@@ -49,8 +54,9 @@ Try to use HTTPie to send a request to the index endpoint (GET /posts) as follow
 http GET localhost:3001/posts 
 ```
 
-### change the posts.js
-you can create post and put http method 
+### Update the controller `posts.js`
+Update the `blog/api/src/controllers/posts.js` file with the following content where you can create post and put http method: 
+
 ```javascript
 const express = require('express');
 const router = express.Router();
@@ -92,30 +98,30 @@ module.exports = router;
 
 Then, try to call http method **post** and **put**
 
-```
+```bash
 http post localhost:3001/posts/
 ```
 and
-```
+```bash
 http put localhost:3001/posts/2
 ```
-# Environment variable configuration
-Stop docker 
 
-```
+### Environment Variable Configuration
+```bash
+#Stop the docker
 docker compose down
 ```
-Create a new folder in the blog/ project directory root called **env.**
-Inside this folder create a file called **mysql.env.** 
-Generate password and other details (as per document guidelines), so that in the **blog/env/mysql.env** the code will look like:
+
+Create a new folder called `env` within the `blog/` project directory. Inside this folder, create a file named `mysql.env` with the following content:
 ```
 MYSQL_USER=admin
 MYSQL_PASS=b763027d3193dd897147da2c96c9417ee5d42a433f49fdd2
 MYSQL_REMOTE_HOST=db
 MYSQL_REMOTE_PORT=3306
 ```
-## New Service (edit docker-compose.yml)
-Modify the file as follows:
+
+### Add a New Service by Modifying docker-compose.yml
+Modify the `docker-compose.yml` file as follows:
 ```
 version: "2"
 services:
@@ -140,65 +146,70 @@ volumes:
     external: false
 
 ```
-## Create new file 
-Create a new file, **blog/api/src/config/database.js**, so that it will look like
-```javascript
-// Discover Node environment (default to development)
-const nodeEnv = process.env.NODE_ENV || 'development';
 
-// Put database configuration properties into an object
+### Create New Files
+
+Create the following files:
+
+**blog/api/src/config/database.js:**
+
+```javascript
 const config = {
-database: nodeEnv + '_db',
-user: process.env.MYSQL_USER,
-password: process.env.MYSQL_PASS,
-host: process.env.MYSQL_REMOTE_HOST,
-port: process.env.MYSQL_REMOTE_PORT,
-dialect: 'mysql'
+    database: process.env.NODE_ENV + '_db',
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASS,
+    host: process.env.MYSQL_REMOTE_HOST,
+    port: process.env.MYSQL_REMOTE_PORT,
+    dialect: 'mysql'
 };
+
 module.exports = config;
 ```
 
+**blog/api/.sequelizerc:**
 
-Create a new file, **blog/api/.sequelizerc.**, so that it will look like
-
-```
+```javascript
 const path = require('path');
 const dbConfig = require('./src/config/database');
 
-// Build the connection URL string
 const connectionUrl = 'mysql://' +
-dbConfig.user + ':' + dbConfig.password + '@' +
-dbConfig.host + ':' + dbConfig.port + '/' + dbConfig.database;
+    dbConfig.user + ':' + dbConfig.password + '@' +
+    dbConfig.host + ':' + dbConfig.port + '/' + dbConfig.database;
 
-// Export settings for the Sequelize command line tool
 module.exports = {
-'url': connectionUrl,
-'migrations-path': path.resolve('src', 'migrations'),
-'models-path': path.resolve('src', 'models'),
-'seeders-path': path.resolve('src', 'seeders')
+    'url': connectionUrl,
+    'migrations-path': path.resolve('src', 'migrations'),
+    'models-path': path.resolve('src', 'models'),
+    'seeders-path': path.resolve('src', 'seeders')
 };
 ```
-## Create sub directories
-Under the **blog/api** folder, create three directories, as follows;
-```
+
+
+### Create Subdirectories
+
+Under the `blog/api` folder, create the following directories:
+
+```bash
 mkdir -p src/{models,migrations,seeders}
 ```
 
-# Creating model
+### Creating Model
 
-Run this command, under **blog** directory
-```
+Run the following command under the `blog` directory:
+
+```bash
 docker compose run --rm api sequelize model:create --name Post --attributes title:string,content:text
 ```
+
 "If the command doesn't work, double-check that you have saved .sequelizerc in the right place (it must be in the api/ folder).
 
 If it is successful, it will create a **post.js** file, as a model definition, under the **models** directory and an **xxxcreate-post.js** file under the **migrations** directory as seen in the image below:"
 
 <p align="center">
-<img title="a title" alt="Alt text" src="1.jpg" width="200" >
+<img title="a title" alt="Alt text" src="1.jpg" width="300" >
 </p>
 
-## Migrate to database
+### Migrate to database
 Run 
 ```bash
  docker compose run --rm api sequelize db:migrate 
@@ -210,7 +221,7 @@ Yo will see the output as follows
 
 It means that the post has been migrated. Note: There is no record has been posted in the table Posts. We will create this later. At the moment we just check the table in the MySQL
 
-### check it in the MySQL
+### Check it in the MySQL
 In the terminal execute the following commands:
 ```
 docker exec -it blog-db-1 bash
@@ -227,7 +238,7 @@ use development_db
 If you check in the database, you will see the Posts table has been created:
 
 <p align="center">
-<img title="tableposts" alt="Alt text" src="3.jpg" width="400" >
+<img title="tableposts" alt="Alt text" src="3.jpg" width="250" >
 </p>
 
 ## Change model definition
@@ -257,12 +268,12 @@ module.exports = function(sequelize, DataTypes) {
 };
 ```
 
-## Create a Seeder
+### Create a Seeder, modify post-seed, and seed the posts
 Note: Run in the **blog** directory.
 
 Use the Sequelize command to create a seeder for the Post records:
 
-```
+```bash
 docker compose run --rm api sequelize seed:create --name posts-seed
 ```
 You will see that new js file **xxx-posts-seed.js** is created
@@ -271,7 +282,7 @@ You will see that new js file **xxx-posts-seed.js** is created
 </p>
 
 
-### Change only Up function
+#### Modify xxx-posts-seed.js
 Note : Modify **xxx-posts-seed.js** to create 2 dummy records.
 
 Open the file and change the content into the following script:
@@ -309,7 +320,7 @@ return queryInterface.bulkDelete('Posts', null, {});
 };
 ```
 
-### Seed the posts
+#### Seed the posts
 Run the following under the blog directory
 
 ```
@@ -328,7 +339,7 @@ By following the same way of the instruction in the MySQL, you can see that two 
 <img title="see-the-seed" alt="Alt text" src="6.jpg" width="600" >
 </p>
 
-## Create Content in the index.js
+### Create Content in the index.js
 Note: Create the blog/src/models/index.js file, and insert the following contents:
 
 ```javascript
@@ -346,7 +357,7 @@ Note: Create the blog/src/models/index.js file, and insert the following content
     // Export our model definitions     
     module.exports = models; 
 ```
-## Post the model
+### Post the model
 Modify the **blog/api/src/controllers/posts.js** into the more detailed sequileze command
 
 ```javascript
@@ -412,17 +423,19 @@ Now, try to test the new modified posts.
 
 Go to blog directory, and run the following commands
 ```bash
+# Retrieve all posts
 http GET localhost:3001/posts
 ```
 <p align="center">
-<img title="retrieve-result" alt="Alt text" src="8.jpg" width="600" >
+<img title="retrieve-result" alt="Alt text" src="7.jpg" width="300" >
 </p>
 
 ```bash
+# Delete a post with ID = 2
 http DELETE localhost:3001/posts/2
 ```
 <p align="center">
-<img title="delete-results" alt="Alt text" src="8.jpg" width="600" >
+<img title="delete-results" alt="Alt text" src="8.jpg" width="300" >
 </p>
 
 
