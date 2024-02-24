@@ -412,12 +412,19 @@ Now, try to test the new modified posts.
 
 Go to blog directory, and run the following commands
 ```bash
-http GET localhost:3001/posts/1
+http GET localhost:3001/posts
 ```
+<p align="center">
+<img title="retrieve-result" alt="Alt text" src="8.jpg" width="600" >
+</p>
+
 ```bash
-http GET localhost:3001/posts/1
+http DELETE localhost:3001/posts/2
 ```
-If
+<p align="center">
+<img title="delete-results" alt="Alt text" src="8.jpg" width="600" >
+</p>
+
 
 
 
