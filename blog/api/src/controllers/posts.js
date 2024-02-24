@@ -1,5 +1,7 @@
 const express = require('express');
+
 const router = express.Router();
+
 // Index: GET /posts/
 router.get('/', (req, res) => {
   res.json({ todo: 'List posts' });
@@ -23,14 +25,8 @@ router.delete('/:postId', (req, res) => {
 
 // Create: POST /posts/
 // TODO: Add a "Create" action
-router.post('/', (req, res) => {
-  res.json({ todo: 'create post with ID auto generated'});
-});
-
 
 // Update: PUT /posts/:postId/
 // TODO: Add an "Update" action
-router.put('/:postId', (req, res) => {
-  res.json({ todo: 'Update post with ID=' + req.params.postId });
-});
+
 module.exports = router;
