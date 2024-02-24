@@ -200,7 +200,7 @@ If it is successful, it will create a **post.js** file, as a model definition, u
 
 ## Migrate to database
 Run 
-```javascript
+```bash
  docker compose run --rm api sequelize db:migrate 
 ```
 Yo will see the output as follows
@@ -236,35 +236,24 @@ Modify model definition to specify validations, so that the posts.js become as f
 
 ```javascript
 'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class Post extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  };
-  Post.init({
-    title: {
-      type: DataTypes.STRING,
-      validate: { notEmpty: true }
-    },
-
-    content: {
-      type: DataTypes.TEXT,
-      validate: { notEmpty: true }
-    }
-  }, {
-    sequelize,
-    modelName: 'Post',
-  });
-  return Post;
+module.exports = function(sequelize, DataTypes) {
+    var Post = sequelize.define('Post', {
+        title: {
+            allowNull:false,
+            type: DataTypes.STRING,
+            validate:{notEmpty: true}},
+        content:{
+            alloNull:false,
+            type:DataTypes.TEXT,
+            validate:{notEmpty:true}},
+    }, {
+        classMethods: {
+            associate: function(models) {
+                // associations can be defined here
+            }
+        }
+    });
+    return Post;
 };
 ```
 
@@ -338,5 +327,98 @@ By following the same way of the instruction in the MySQL, you can see that two 
 <p align="center">
 <img title="see-the-seed" alt="Alt text" src="6.jpg" width="600" >
 </p>
+
+## Create Content in the index.js
+Note: Create the blog/src/models/index.js file, and insert the following contents:
+
+```javascript
+    const Sequelize = require('sequelize');     
+    // Load our database configuration     
+    const dbConfig = require('../config/database');
+    // Connect Sequelize to the database     
+    const sequelize = new Sequelize(dbConfig.database, dbConfig.user, dbConfig.password, dbConfig);     
+    // Load all of our model definitions     
+    const models = {         
+        Post: sequelize.import(require.resolve('./post'))     
+    };
+    // Store the database connection     
+    models.database = sequelize;     
+    // Export our model definitions     
+    module.exports = models; 
+```
+## Post the model
+Modify the **blog/api/src/controllers/posts.js** into the more detailed sequileze command
+
+```javascript
+const express = require('express');
+const _ = require('lodash');
+const models = require('../models');
+const router = express.Router();
+
+// Selects only the fields that are allowed to be set by users
+function postFilter(obj) {
+    return _.pick(obj, ['title', 'content']);
+}
+
+// Index
+router.get('/', (req, res) => {
+    // Return a list of the five most recent posts
+    const queryOptions = {
+        order: [['createdAt', 'DESC']],
+        limit: 5
+    };
+    models.Post.findAll(queryOptions)
+        .then(posts => res.json(posts))
+        .catch(err => res.status(500).json({ error: err.message }));
+});
+
+// Create
+router.post('/', (req, res) => {
+    // Create a new post record in the database
+    models.Post.create(postFilter(req.body))
+        .then(post => res.json(post))
+        .catch(err => res.status(422).json({ error: err.message }));
+});
+
+// Show
+router.get('/:postId', (req, res) => {
+    // Return the specified post record from the database
+    models.Post.findById(req.params.postId)
+        .then(post => res.json(post))
+        .catch(err => res.status(500).json({ error: err.message }));
+});
+
+// Destroy
+router.delete('/:postId', (req, res) => {
+    // Delete the specified post record from the database
+    models.Post.destroy({ where: { id: req.params.postId } })
+        .then(() => res.json({}))
+        .catch(err => res.status(500).json({ error: err.message }));
+});
+
+// Update
+// TODO: Implement the update action here
+router.put('/:postId', (req, res) => {
+    // Update the specified post record in the database
+    models.Post.findById(req.params.postId)
+        .then(post => post.update(postFilter(req.body)))
+        .then(post => res.json(post))
+        .catch(err => res.status(422).json({ error: err.message }));
+});
+module.exports = router;
+```
+
+Now, try to test the new modified posts.
+
+Go to blog directory, and run the following commands
+```bash
+http GET localhost:3001/posts/1
+```
+```bash
+http GET localhost:3001/posts/1
+```
+If
+
+
 
 
