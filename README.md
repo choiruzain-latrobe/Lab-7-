@@ -219,7 +219,7 @@ Yo will see the output as follows
 
 It means that the post has been migrated. Note: There is no record has been posted in the table Posts. We will create this later. At the moment we just check the table in the MySQL
 
-If it is successful, it will create a **post.js** file, as a model definition, under the **models** directory and an **xxxcreate-post.js** file under the **migrations** directory as seen in the image below:"
+If those two commands are successful, they will create a **post.js** file, as a model definition, under the **models** directory and an **xxxcreate-post.js** file under the **migrations** directory as seen in the image below:"
 
 <p align="center">
 <img title="a title" alt="Alt text" src="1.jpg" width="300" >
@@ -247,8 +247,9 @@ If you check in the database, you will see the Posts table has been created:
 </p>
 
 ## Change model definition
-File: blog/api/src/models/post.js
-Modify model definition to specify validations, so that the posts.js become as follows:
+File: blog/api/src/models/post.js.
+
+Modify model definition to specify validations, so that the posts.js become as follows: (done)
 
 ```javascript
 'use strict';
@@ -325,7 +326,7 @@ return queryInterface.bulkDelete('Posts', null, {});
 };
 ```
 
-#### Seed the posts
+#### Seed the posts (Important parts)
 Run the following under the blog directory
 
 ```
@@ -344,8 +345,8 @@ By following the same way of the instruction in the MySQL, you can see that two 
 <img title="see-the-seed" alt="Alt text" src="6.jpg" width="600" >
 </p>
 
-### Create Content in the index.js
-Note: Create the blog/src/models/index.js file, and insert the following contents:
+### Create a new file index.js
+Note: Create content int the `blog/src/models/index.js` file, and insert the following contents:
 
 ```javascript
     const Sequelize = require('sequelize');     
@@ -363,7 +364,36 @@ Note: Create the blog/src/models/index.js file, and insert the following content
     module.exports = models; 
 ```
 ### Post the model
-Modify the **blog/api/src/controllers/posts.js** into the more detailed sequileze command
+Because we change `blog/api/src/controllers/posts.js`, we require model
+definition `blog/api/src/model/post.js`. 
+
+There are two steps: 
+1. Modify `blog/api/src/model/post.js` as follow:
+
+```javascript
+'use strict';
+module.exports = function(sequelize, DataTypes) {
+  var Post = sequelize.define('Post', {
+    title: {
+      allowNull:false,
+      type: DataTypes.STRING,
+      validate:{notEmpty: true}},
+    content:{
+      alloNull:false,
+      type:DataTypes.TEXT,
+      validate:{notEmpty:true}},
+  }, {
+    classMethods: {
+      associate: function(models) {
+        // associations can be defined here
+      }
+    }
+  });
+  return Post;
+};
+```
+
+2. Modify the `blog/api/src/controllers/posts.js` into the more detailed sequileze command
 
 ```javascript
 const express = require('express');
@@ -373,57 +403,56 @@ const router = express.Router();
 
 // Selects only the fields that are allowed to be set by users
 function postFilter(obj) {
-    return _.pick(obj, ['title', 'content']);
+   return _.pick(obj, ['title', 'content']);
 }
 
 // Index
 router.get('/', (req, res) => {
-    // Return a list of the five most recent posts
-    const queryOptions = {
-        order: [['createdAt', 'DESC']],
-        limit: 5
-    };
-    models.Post.findAll(queryOptions)
-        .then(posts => res.json(posts))
-        .catch(err => res.status(500).json({ error: err.message }));
+   // Return a list of the five most recent posts
+   const queryOptions = {
+      order: [['createdAt', 'DESC']],
+      limit: 5
+   };
+   models.Post.findAll(queryOptions)
+           .then(posts => res.json(posts))
+           .catch(err => res.status(500).json({ error: err.message }));
 });
 
 // Create
 router.post('/', (req, res) => {
-    // Create a new post record in the database
-    models.Post.create(postFilter(req.body))
-        .then(post => res.json(post))
-        .catch(err => res.status(422).json({ error: err.message }));
+   // Create a new post record in the database
+   models.Post.create(postFilter(req.body))
+           .then(post => res.json(post))
+           .catch(err => res.status(422).json({ error: err.message }));
 });
 
 // Show
 router.get('/:postId', (req, res) => {
-    // Return the specified post record from the database
-    models.Post.findById(req.params.postId)
-        .then(post => res.json(post))
-        .catch(err => res.status(500).json({ error: err.message }));
+   // Return the specified post record from the database
+   models.Post.findById(req.params.postId)
+           .then(post => res.json(post))
+           .catch(err => res.status(500).json({ error: err.message }));
 });
 
 // Destroy
 router.delete('/:postId', (req, res) => {
-    // Delete the specified post record from the database
-    models.Post.destroy({ where: { id: req.params.postId } })
-        .then(() => res.json({}))
-        .catch(err => res.status(500).json({ error: err.message }));
+   // Delete the specified post record from the database
+   models.Post.destroy({ where: { id: req.params.postId } })
+           .then(() => res.json({}))
+           .catch(err => res.status(500).json({ error: err.message }));
 });
 
 // Update
 // TODO: Implement the update action here
 router.put('/:postId', (req, res) => {
-    // Update the specified post record in the database
-    models.Post.findById(req.params.postId)
-        .then(post => post.update(postFilter(req.body)))
-        .then(post => res.json(post))
-        .catch(err => res.status(422).json({ error: err.message }));
+   // Update the specified post record in the database
+   models.Post.findById(req.params.postId)
+           .then(post => post.update(postFilter(req.body)))
+           .then(post => res.json(post))
+           .catch(err => res.status(422).json({ error: err.message }));
 });
 module.exports = router;
 ```
-
 Now, try to test the new modified posts.
 
 Go to blog directory, and run the following commands
