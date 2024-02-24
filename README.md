@@ -368,7 +368,7 @@ Because we change `blog/api/src/controllers/posts.js`, we require model
 definition `blog/api/src/model/post.js`. 
 
 There are two steps: 
-1. Modify `blog/api/src/model/post.js` as follow:
+1. Modify `blog/api/src/models/post.js` as follow:
 
 ```javascript
 'use strict';
