@@ -155,6 +155,7 @@ volumes:
 Create the following files:
 
 **blog/api/src/config/database.js:**
+(done)
 
 ```javascript
 const config = {
@@ -169,7 +170,7 @@ const config = {
 module.exports = config;
 ```
 
-**blog/api/.sequelizerc:**
+**blog/api/.sequelizerc:**(done)
 
 ```javascript
 const path = require('path');
@@ -206,14 +207,8 @@ docker compose run --rm api sequelize model:create --name Post --attributes titl
 
 "If the command doesn't work, double-check that you have saved .sequelizerc in the right place (it must be in the api/ folder).
 
-If it is successful, it will create a **post.js** file, as a model definition, under the **models** directory and an **xxxcreate-post.js** file under the **migrations** directory as seen in the image below:"
-
-<p align="center">
-<img title="a title" alt="Alt text" src="1.jpg" width="300" >
-</p>
-
 ### Migrate to database
-Run 
+Run
 ```bash
  docker compose run --rm api sequelize db:migrate 
 ```
@@ -223,6 +218,13 @@ Yo will see the output as follows
 </p>
 
 It means that the post has been migrated. Note: There is no record has been posted in the table Posts. We will create this later. At the moment we just check the table in the MySQL
+
+If it is successful, it will create a **post.js** file, as a model definition, under the **models** directory and an **xxxcreate-post.js** file under the **migrations** directory as seen in the image below:"
+
+<p align="center">
+<img title="a title" alt="Alt text" src="1.jpg" width="300" >
+</p>
+
 
 ### Check it in the MySQL
 In the terminal execute the following commands:
