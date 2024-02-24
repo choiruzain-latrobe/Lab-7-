@@ -13,6 +13,7 @@ Follow these steps to set up and run the Blog API:
     ```
 
 2. **Run the Mock Rest Server:**
+
    Navigate to the `mock-rest-server` folder and execute the docker command:
 
    ```bash
@@ -23,6 +24,7 @@ Follow these steps to set up and run the Blog API:
    Stop the server (Ctrl + C or Cmd+C), direct the terminal into blog directory
 
 3. **Run the Blog Directory:**
+
    Navigate to the `blog` folder and execute the docker command:
     ```bash
     docker compose up --build
