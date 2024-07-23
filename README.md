@@ -32,8 +32,8 @@ Follow these steps to set up and run the Blog API:
    We will explore the rest of the lab through this folder.
    
    You will see the **output** as follows:
-   ```json
-   # DO NOT RUN
+   ```
+   DO NOT RUN
    docker compose up --build
    
    [+] Building 4.2s (14/14) FINISHED                                                                                                                                                                 docker:desktop-linux
@@ -100,8 +100,8 @@ http GET localhost:3001/posts
 
 You will get the output as follows:
 
-```json
-# DO NOT RUN
+```
+DO NOT RUN
 blog % http GET localhost:3001/posts
 
 http GET localhost:3001/posts
@@ -175,7 +175,7 @@ http put localhost:3001/posts/2
 
 The output for both of them are as follows:
 
-```angular17html
+```
 (Query 1)
 
 http post localhost:3000/posts/
