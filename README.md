@@ -30,6 +30,51 @@ Follow these steps to set up and run the Blog API:
     docker compose up --build
     ```
    We will explore the rest of the lab through this folder.
+   
+   You will see the **output** as follows:
+   ```shell
+   % **docker compose up --build**
+   
+   [+] Building 4.2s (14/14) FINISHED                                                                                                                                                                 docker:desktop-linux
+   => [api internal] load build definition from Dockerfile                                                                                                                                                           0.0s
+   => => transferring dockerfile: 1.40kB                                                                                                                                                                             0.0s
+   => [api internal] load .dockerignore                                                                                                                                                                              0.0s
+   => => transferring context: 2B                                                                                                                                                                                    0.0s
+   => [api internal] load metadata for docker.io/library/node:18.16.0-alpine                                                                                                                                         4.2s
+   => [api 1/9] FROM docker.io/library/node:18.16.0-alpine@sha256:9036ddb8252ba7089c2c83eb2b0dcaf74ff1069e8ddf86fe2bd6dc5fecc9492d                                                                                   0.0s
+   => [api internal] load build context                                                                                                                                                                              0.0s
+   => => transferring context: 5.37kB                                                                                                                                                                                0.0s
+   => CACHED [api 2/9] RUN apk add --no-cache tini curl bash sudo                                                                                                                                                    0.0s
+   => CACHED [api 3/9] RUN mkdir -p /app                                                                                                                                                                             0.0s
+   => CACHED [api 4/9] WORKDIR /app                                                                                                                                                                                  0.0s
+   => CACHED [api 5/9] COPY package.json /app/                                                                                                                                                                       0.0s
+   => CACHED [api 6/9] RUN npm --silent install                                                                                                                                                                      0.0s
+   => CACHED [api 7/9] RUN mkdir /deps && mv node_modules /deps/node_modules                                                                                                                                         0.0s
+   => CACHED [api 8/9] COPY . /app                                                                                                                                                                                   0.0s
+   => CACHED [api 9/9] RUN chown -R node:node /app /deps  && echo "node ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-node                                                                                             0.0s
+   => [api] exporting to image                                                                                                                                                                                       0.0s
+   => => exporting layers                                                                                                                                                                                            0.0s
+   => => writing image sha256:c603f545443ddee2496060210121491cd10917322b9f6eba81c68f97d411acac                                                                                                                       0.0s
+   => => naming to docker.io/library/blog-api                                                                                                                                                                        0.0s
+   WARN[0004] Found orphan containers ([blog-db-1]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
+   [+] Running 1/1
+   ✔ Container blog-api-1  Created                                                                                                                                                                                   0.2s
+   Attaching to blog-api-1
+   blog-api-1  |
+   blog-api-1  | > blog-api@0.0.1 start
+   blog-api-1  | > nodemon -L -x 'node --use_strict --nolazy' -e .js -w src src/server.js
+   blog-api-1  |
+   blog-api-1  | [nodemon] 1.11.0
+   blog-api-1  | [nodemon] to restart at any time, enter `rs`
+   blog-api-1  | [nodemon] watching: /app/src/**/*
+   blog-api-1  | [nodemon] starting `node --use_strict --nolazy src/server.js`
+   blog-api-1  | API server started
+   ```
+4. 
+   
+
+   
+   
 
 ## Step by step Solutions (of Blog API)
 
@@ -56,6 +101,8 @@ Try to use HTTPie to send a request to the index endpoint (GET /posts) as follow
 ```
 http GET localhost:3001/posts 
 ```
+
+
 
 ### Update the controller `posts.js`
 Update the `blog/api/src/controllers/posts.js` file with the following content where you can create post and put http method: 
