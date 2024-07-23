@@ -100,7 +100,7 @@ http GET localhost:3001/posts
 
 You will get the output as follows:
 
-```angular17html
+```json
 # DO NOT RUN
 blog % http GET localhost:3001/posts
 
