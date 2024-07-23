@@ -70,11 +70,6 @@ Follow these steps to set up and run the Blog API:
    blog-api-1  | [nodemon] starting `node --use_strict --nolazy src/server.js`
    blog-api-1  | API server started
    ```
-4. 
-   
-
-   
-   
 
 ## Step by step Solutions (of Blog API)
 
