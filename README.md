@@ -93,9 +93,9 @@ app.use('/posts', posts) // <-- Insert this line
 };
 module.exports = routes;
 ```
-2. Open the new terminal. Try to use HTTPie to send a request to the index endpoint (GET /posts) as follows;
+2. Open the new terminal. Try to use HTTPie to send a request to the index endpoint (GET /posts). Run the following command in the terminal as follows;
 ```
-http GET localhost:3001/posts 
+http GET localhost:3000/posts 
 ```
 
 You will get the output as follows:
