@@ -168,7 +168,7 @@ http post localhost:3000/posts/
 ```
 and
 ```bash
-http put localhost:3001/posts/2
+http put localhost:3000/posts/2
 ```
 
 The output for both of them are as follows:
@@ -209,13 +209,23 @@ X-Powered-By: Express
 ```
 
 ### Environment Variable Configuration
-
+1. For configuration setup, stop the docker
 ```bash
-#Stop the docker
+
 docker compose down
 ```
 
-Create a new folder called `env` within the `blog/` project directory. Inside this folder, create a file named `mysql.env` with the following content:
+The example output is as follows:
+
+```bash
+DO NOT RUN
+% docker compose down 
+[+] Running 2/2
+ ✔ Container blog-api-1  Removed                                                                                                                                                        0.1s 
+ ✔ Network blog_default  Removed   
+```
+
+2. Create a new folder called `env` within the `blog/` project directory. Inside this folder, create a file named `mysql.env` with the following content:
 ```
 MYSQL_USER=admin
 MYSQL_PASS=b763027d3193dd897147da2c96c9417ee5d42a433f49fdd2
@@ -223,8 +233,9 @@ MYSQL_REMOTE_HOST=db
 MYSQL_REMOTE_PORT=3306
 ```
 
-### Add a New Service by Modifying docker-compose.yml
-Modify the `docker-compose.yml` file as follows (done):
+3.  Add a New Service by Modifying docker-compose.yml.
+
+Modify the docker-compose.yml file to match the following configuration:
 ```
 version: "2"
 services:
