@@ -17,8 +17,8 @@ Follow these steps to set up and run the Blog API:
    Navigate to the `mock-rest-server` folder and execute the docker command:
 
    ```
-    docker compose up --build
-    ```
+   docker compose up --build
+   ```
       
    After running the server, access it locally at [http://localhost:3000](http://localhost:3000/).
    Stop the server (Ctrl + C or Cmd+C), direct the terminal into blog directory
@@ -32,8 +32,9 @@ Follow these steps to set up and run the Blog API:
    We will explore the rest of the lab through this folder.
    
    You will see the **output** as follows:
-   ```shell
-   % **docker compose up --build**
+   ```json
+   # DO NOT RUN
+   docker compose up --build
    
    [+] Building 4.2s (14/14) FINISHED                                                                                                                                                                 docker:desktop-linux
    => [api internal] load build definition from Dockerfile                                                                                                                                                           0.0s
@@ -70,16 +71,12 @@ Follow these steps to set up and run the Blog API:
    blog-api-1  | [nodemon] starting `node --use_strict --nolazy src/server.js`
    blog-api-1  | API server started
    ```
-4. 
-   
-
-   
-   
 
 ## Step by step Solutions (of Blog API)
 
-### Configure Routes 
-Modify the `blog/api/src/config/routes.js` file as follows:
+### Configure Routes
+
+1. Modify the `blog/api/src/config/routes.js` file as follows:
 
 ```javascript
 const index = require('../controllers/index');
@@ -96,10 +93,30 @@ app.use('/posts', posts) // <-- Insert this line
 };
 module.exports = routes;
 ```
-
-Try to use HTTPie to send a request to the index endpoint (GET /posts) as follows;
+2. Open the new terminal. Try to use HTTPie to send a request to the index endpoint (GET /posts) as follows;
 ```
 http GET localhost:3001/posts 
+```
+
+You will get the output as follows:
+
+```angular17html
+# DO NOT RUN
+blog % http GET localhost:3001/posts
+
+http GET localhost:3001/posts
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 21
+Content-Type: application/json; charset=utf-8
+Date: Tue, 23 Jul 2024 11:54:38 GMT
+ETag: W/"15-Sv7OHnrfWg1qnZvSZ/j1dJv1FoQ"
+Keep-Alive: timeout=5
+X-Powered-By: Express
+
+{
+    "todo": "List posts"
+}
 ```
 
 
@@ -149,14 +166,52 @@ module.exports = router;
 Then, try to call http method **post** and **put**
 
 ```bash
-http post localhost:3001/posts/
+http post localhost:3000/posts/
 ```
 and
 ```bash
 http put localhost:3001/posts/2
 ```
 
+The output for both of them are as follows:
+
+```angular17html
+(Query 1)
+
+http post localhost:3000/posts/
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 45
+Content-Type: application/json; charset=utf-8
+Date: Tue, 23 Jul 2024 12:02:38 GMT
+ETag: W/"2d-SLuYK2Ng9thKtZ/G5U5O0Ds57hE"
+Keep-Alive: timeout=5
+X-Powered-By: Express
+
+{
+    "todo": "create post with ID auto generated"
+}
+
+
+
+(Query 2)
+
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 32
+Content-Type: application/json; charset=utf-8
+Date: Tue, 23 Jul 2024 12:04:30 GMT
+ETag: W/"20-3DV8Idus24MqZjFdgnJRFE/uUs8"
+Keep-Alive: timeout=5
+X-Powered-By: Express
+
+{
+"todo": "Update post with ID=2"
+}
+```
+
 ### Environment Variable Configuration
+
 ```bash
 #Stop the docker
 docker compose down
