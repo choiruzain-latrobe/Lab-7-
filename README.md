@@ -215,6 +215,7 @@ X-Powered-By: Express
 ```bash
 #Stop the docker
 docker compose down
+
 ```
 
 Create a new folder called `env` within the `blog/` project directory. Inside this folder, create a file named `mysql.env` with the following content:
