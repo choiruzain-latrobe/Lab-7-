@@ -101,10 +101,8 @@ http GET localhost:3001/posts
 You will get the output as follows:
 
 ```
-DO NOT RUN
-blog % http GET localhost:3001/posts
+http GET localhost:3000/posts
 
-http GET localhost:3001/posts
 HTTP/1.1 200 OK
 Connection: keep-alive
 Content-Length: 21
