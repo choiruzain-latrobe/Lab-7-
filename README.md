@@ -261,60 +261,53 @@ volumes:
 
 ```
 
-### Create New Files
+4. Create New Files 
+   
+   4.1. Create the **blog/api/src/config/database.js:** file:
+      
+         const config = {
+         database: process.env.NODE_ENV + '_db',
+         user: process.env.MYSQL_USER,
+         password: process.env.MYSQL_PASS,
+         host: process.env.MYSQL_REMOTE_HOST,
+         port: process.env.MYSQL_REMOTE_PORT,
+         dialect: 'mysql'
+         };
+   
+         module.exports = config;
+      4.2. Create the **blog/api/.sequelizerc** file:
 
-Create the following files:
-
-**blog/api/src/config/database.js:**
-(done)
-
-```javascript
-const config = {
-    database: process.env.NODE_ENV + '_db',
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASS,
-    host: process.env.MYSQL_REMOTE_HOST,
-    port: process.env.MYSQL_REMOTE_PORT,
-    dialect: 'mysql'
-};
-
-module.exports = config;
-```
-
-**blog/api/.sequelizerc:**(done)
-
-```javascript
-const path = require('path');
-const dbConfig = require('./src/config/database');
-
-const connectionUrl = 'mysql://' +
-    dbConfig.user + ':' + dbConfig.password + '@' +
-    dbConfig.host + ':' + dbConfig.port + '/' + dbConfig.database;
-
-module.exports = {
-    'url': connectionUrl,
-    'migrations-path': path.resolve('src', 'migrations'),
-    'models-path': path.resolve('src', 'models'),
-    'seeders-path': path.resolve('src', 'seeders')
-};
-```
+         const path = require('path');
+         const dbConfig = require('./src/config/database');
+         
+         const connectionUrl = 'mysql://' +
+             dbConfig.user + ':' + dbConfig.password + '@' +
+             dbConfig.host + ':' + dbConfig.port + '/' + dbConfig.database;
+         
+         module.exports = {
+             'url': connectionUrl,
+             'migrations-path': path.resolve('src', 'migrations'),
+             'models-path': path.resolve('src', 'models'),
+             'seeders-path': path.resolve('src', 'seeders')
+         };
 
 
-### Create Subdirectories
 
-Under the `blog/api` folder, create the following directories:
+   5. Create Subdirectories 
+   
+      Under the `blog/api` folder, create the following directories:
 
-```bash
-mkdir -p src/{models,migrations,seeders}
-```
+      ```bash
+      mkdir -p src/{models,migrations,seeders}
+      ```
 
-### Creating Model
+   6. Creating Model
 
-Run the following command under the `blog` directory:
+      Run the following command under the `blog` directory:
 
-```bash
-docker compose run --rm api sequelize model:create --name Post --attributes title:string,content:text
-```
+      ```bash
+      docker compose run --rm api sequelize model:create --name Post --attributes title:string,content:text
+      ```
 
 "If the command doesn't work, double-check that you have saved .sequelizerc in the right place (it must be in the api/ folder).
 
