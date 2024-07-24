@@ -235,7 +235,7 @@ MYSQL_REMOTE_PORT=3306
 
 3.  Add a New Service by Modifying docker-compose.yml.
 
-Modify the docker-compose.yml file to match the following configuration:
+      Modify the docker-compose.yml file to match the following configuration:
 ```
 version: "2"
 services:
@@ -243,23 +243,51 @@ services:
     build: api
     volumes:
       - "./api:/app"
-    env_file: 
+    env_file:
       - ./env/mysql.env
     ports:
       - "3000:3000"
     links:
       - db
+
   db:
     image: tutum/mysql:5.6
-    environment: 
-      - ON_CREATE_DB=development_db 
-    env_file: 
-      - ./env/mysql.env 
-volumes: 
+    environment:
+      - ON_CREATE_DB=development_db
+    env_file:
+      - ./env/mysql.env
+    volumes:
+      - "blog-db-data:/var/lib/mysql"
+
+volumes:
   blog-db-data:
     external: false
 
 ```
+
+   3.1. You can try running the the mysql. In the ``blog`` directory, run the following command:
+   
+   `docker compose up --build`
+   You will see some output that two containers are made, and mysql container was made as follows:
+   
+  
+
+   ```
+   ................
+   blog-db-1   | => Done!
+   blog-db-1   | ========================================================================
+   blog-db-1   | You can now connect to this MySQL Server using:
+   blog-db-1   |
+   blog-db-1   |     mysql -uadmin -pb763027d3193dd897147da2c96c9417ee5d42a433f49fdd2 -h<host> -P<port>
+   blog-db-1   |
+   blog-db-1   | Please remember to change the above password as soon as possible!
+   blog-db-1   | MySQL user 'root' has no password but only allows local connections
+   blog-db-1   | ========================================================================
+   ```
+   
+
+
+   `mysql -uadmin -pb763027d3193dd897147da2c96c9417ee5d42a433f49fdd2`
 
 4. Create New Files 
    
