@@ -268,26 +268,43 @@ volumes:
    3.1. You can try running the the mysql. In the ``blog`` directory, run the following command:
    
    `docker compose up --build`
-   You will see some output that two containers are made, and mysql container was made as follows:
+      You will see some output that two containers are made, and mysql container was made as follows:
    
   
 
-   ```
-   ................
-   blog-db-1   | => Done!
-   blog-db-1   | ========================================================================
-   blog-db-1   | You can now connect to this MySQL Server using:
-   blog-db-1   |
-   blog-db-1   |     mysql -uadmin -pb763027d3193dd897147da2c96c9417ee5d42a433f49fdd2 -h<host> -P<port>
-   blog-db-1   |
-   blog-db-1   | Please remember to change the above password as soon as possible!
-   blog-db-1   | MySQL user 'root' has no password but only allows local connections
-   blog-db-1   | ========================================================================
-   ```
+      ```
+      ................
+      blog-db-1   | => Done!
+      blog-db-1   | ========================================================================
+      blog-db-1   | You can now connect to this MySQL Server using:
+      blog-db-1   |
+      blog-db-1   |     mysql -uadmin -pb763027d3193dd897147da2c96c9417ee5d42a433f49fdd2 -h<host> -P<port>
+      blog-db-1   |
+      blog-db-1   | Please remember to change the above password as soon as possible!
+      blog-db-1   | MySQL user 'root' has no password but only allows local connections
+      blog-db-1   | ========================================================================
+      ```
+   You can check the containers with the command:
+   `docker ps`
    
-
+   and **open new terminal**, then go delve into the terminal by executing the command`docker exec -it blog-db-1 bash`
+   
+   when the mysql shell opens, you can try to login into the MySQL database system by running this command:
+   **Note: please adjust whatever shown in your PC or laptop (this is just example)**
 
    `mysql -uadmin -pb763027d3193dd897147da2c96c9417ee5d42a433f49fdd2`
+
+   once its success, the following shell will appear:
+   ```
+   Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.
+   Oracle is a registered trademark of Oracle Corporation and/or its
+   affiliates. Other names may be trademarks of their respective
+   owners.
+   
+   Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+   
+   mysql>
+   ```
 
 4. Create New Files 
    
