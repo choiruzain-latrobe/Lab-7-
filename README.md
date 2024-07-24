@@ -291,8 +291,7 @@ volumes:
              'seeders-path': path.resolve('src', 'seeders')
          };
 
-5. Create New Files
-   5. Create Subdirectories 
+5. Create Subdirectories 
    
       Under the `blog/api` folder, create the following directories:
 
@@ -300,13 +299,13 @@ volumes:
       mkdir -p src/{models,migrations,seeders}
       ```
 
-   6. Creating Model
+6. Creating Model
 
-      Run the following command under the `blog` directory:
+   Run the following command under the `blog` directory:
 
-      ```bash
-      docker compose run --rm api sequelize model:create --name Post --attributes title:string,content:text
-      ```
+   ```bash
+   docker compose run --rm api sequelize model:create --name Post --attributes title:string,content:text
+   ```
 
 "If the command doesn't work, double-check that you have saved .sequelizerc in the right place (it must be in the api/ folder).
 
