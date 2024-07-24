@@ -291,8 +291,7 @@ volumes:
              'seeders-path': path.resolve('src', 'seeders')
          };
 
-
-
+5. Create New Files
    5. Create Subdirectories 
    
       Under the `blog/api` folder, create the following directories:
