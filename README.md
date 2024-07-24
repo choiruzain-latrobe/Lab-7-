@@ -269,8 +269,6 @@ volumes:
    
    `docker compose up --build`
       You will see some output that two containers are made, and mysql container was made as follows:
-   
-  
 
       ```
       ................
@@ -290,7 +288,8 @@ volumes:
    and **open new terminal**, then go delve into the terminal by executing the command`docker exec -it blog-db-1 bash`
    
    when the mysql shell opens, you can try to login into the MySQL database system by running this command:
-   **Note: please adjust whatever shown in your PC or laptop (this is just example)**
+   
+**Note: please adjust whatever shown in your PC or laptop (this is just example)**
 
    `mysql -uadmin -pb763027d3193dd897147da2c96c9417ee5d42a433f49fdd2`
 
@@ -310,16 +309,19 @@ volumes:
    
    4.1. Create the **blog/api/src/config/database.js:** file:
       
+         const nodeEnv = process.env.NODE_ENV || 'development';
+
          const config = {
-         database: process.env.NODE_ENV + '_db',
+         database: nodeEnv + '_db',
          user: process.env.MYSQL_USER,
          password: process.env.MYSQL_PASS,
          host: process.env.MYSQL_REMOTE_HOST,
          port: process.env.MYSQL_REMOTE_PORT,
          dialect: 'mysql'
          };
-   
+         
          module.exports = config;
+
       4.2. Create the **blog/api/.sequelizerc** file:
 
          const path = require('path');
@@ -352,14 +354,27 @@ volumes:
    docker compose run --rm api sequelize model:create --name Post --attributes title:string,content:text
    ```
 
-"If the command doesn't work, double-check that you have saved .sequelizerc in the right place (it must be in the api/ folder).
+   If the command doesn't work, double-check that you have saved .sequelizerc in the right place (it must be in the api/ folder).
+   Once its success, it will be seen as follows:
+      
+      ```
+      blog % docker compose run --rm api sequelize model:create --name Post --attributes title:string,content:text --force 
+      [+] Creating 1/0
+       ✔ Container blog-db-1  Running                                                                                                                                                                                 0.0s 
+      
+      Sequelize CLI [Node: 18.16.0, CLI: 6.1.0, ORM: 3.30.4]
+      
+      New model was created at /app/src/models/post.js .
+      New migration was created at /app/src/migrations/20240724012619-create-post.js .
+      ```
+      It means that new js script model is created.
 
-### Migrate to database
-Run
+### Migrate model created above to database
+**Open the new terminal**, run the following command:
 ```bash
  docker compose run --rm api sequelize db:migrate 
 ```
-Yo will see the output as follows
+You will see the output as follows
 <p align="center">
 <img title="a title" alt="Alt text" src="2.jpg" width="600" >
 </p>
@@ -605,7 +620,7 @@ Now, try to test the new modified posts.
 Go to blog directory, and run the following commands
 ```bash
 # Retrieve all posts
-http GET localhost:3001/posts
+http GET localhost:3000/posts
 ```
 <p align="center">
 <img title="retrieve-result" alt="Alt text" src="7.jpg" width="300" >
@@ -613,7 +628,7 @@ http GET localhost:3001/posts
 
 ```bash
 # Delete a post with ID = 2
-http DELETE localhost:3001/posts/2
+http DELETE localhost:3000/posts/2
 ```
 <p align="center">
 <img title="delete-results" alt="Alt text" src="8.jpg" width="300" >
